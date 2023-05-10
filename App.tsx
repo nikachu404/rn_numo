@@ -1,118 +1,75 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { SvgUri } from 'react-native-svg';
+import { TodayJoke, JokeHistory } from './src/screens';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+  HISTORY_ICON,
+  HISTORY_ICON_ACTIVE,
+  TODAY_ICON,
+  TODAY_ICON_ACTIVE,
+} from './src/constants';
+import { store, persistor } from './src/redux/store';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+export const App = () => {
+  const Tab = createBottomTabNavigator();
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              headerTitleStyle: {
+                marginTop: 72,
+                fontFamily: 'Inter-Bold',
+                fontSize: 36,
+                lineHeight: 48,
+              },
+              headerStyle: {
+                height: 152,
+                borderBottomWidth: 1,
+                borderBottomColor: '#E6E6E6',
+                borderStyle: 'solid',
+              },
+              tabBarActiveTintColor: '#9763FF',
+              tabBarInactiveTintColor: '#C1C3C6',
+              tabBarLabelStyle: {
+                fontSize: 12,
+                lineHeight: 16,
+                fontFamily: 'Inter-SemiBold',
+                letterSpacing: 0.02,
+              },
+              tabBarIcon: ({ focused }) => {
+                let icon;
+
+                if (route.name === 'Today') {
+                  icon = (
+                    <SvgUri uri={focused ? TODAY_ICON_ACTIVE : TODAY_ICON} />
+                  );
+                } else if (route.name === 'History') {
+                  icon = (
+                    <SvgUri
+                      uri={focused ? HISTORY_ICON_ACTIVE : HISTORY_ICON}
+                    />
+                  );
+                }
+
+                return icon;
+              },
+              tabBarStyle: {
+                height: 68,
+                paddingHorizontal: 114,
+                paddingBottom: 10,
+              },
+            })}>
+            <Tab.Screen name="Today" component={TodayJoke} />
+            <Tab.Screen name="History" component={JokeHistory} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+};
