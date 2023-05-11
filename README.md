@@ -1,7 +1,7 @@
 <h1 align="center">🍓Numo Test Task🍓</h1>
 
 
-- [✨DEMO✨](https://vimeo.com/825617139?share=copy)
+- [✨DEMO✨](https://vimeo.com/825798053?share=copy)
 - [✏️TASK✏️](https://themindist.notion.site/Numo-Test-Case-55f003444cf644d6bddf105c7df4b98e)
 
 <h2 align="center">Technologies used</h2>
