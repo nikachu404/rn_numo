@@ -20,6 +20,8 @@ const styles = StyleSheet.create({
   jokeContainer: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: 24,
     paddingVertical: 24,
     borderBottomWidth: 1,
     borderBottomColor: '#E6E6E6',
